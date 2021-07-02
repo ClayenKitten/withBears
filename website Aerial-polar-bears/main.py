@@ -20,16 +20,16 @@ class UploadForm(FlaskForm):
 def home():
     form = UploadForm()
     try:
-        shutil.rmtree('./static/runs/detect/exp')
+        shutil.rmtree('/root/static/runs/detect/exp')
     except FileNotFoundError:
         pass
     if form.validate_on_submit():
         filename = secure_filename(form.file.data.filename)
         form.file.data.save('uploads/' + filename)
         os.system(
-                'python E:/pyton/Aerial-polar-bears/yolov5/models/detect.py --weights ./yolov5/weights/best.pt --conf 0.4 '
-                '--img 416 --source ./uploads --project ./static/runs/detect')
-        os.remove(f'./uploads/{filename}')
+                'python /root/yolov5/detect.py --weights /root/yolov5/weights/best.pt --conf 0.4 '
+                '--img 416 --source /root/uploads --project /root/static/runs/detect')
+        os.remove(f'/root/uploads/{filename}')
 
         return redirect(url_for('image', filename=filename))
 
@@ -42,4 +42,4 @@ def image(filename):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
